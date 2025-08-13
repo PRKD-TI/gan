@@ -6,6 +6,19 @@ __pycache__/
 # C extensions
 *.so
 
+# Arquivos jpg jpeg zip pt não devem entrar na lista de alterações/adições
+*.jpg
+*.jpeg
+*.png
+*.zip
+*.pt
+/logs
+/checkpoints_epoch
+/checkpoints_batch
+/runs
+colab_key*
+
+
 # Distribution / packaging
 .Python
 build/
