@@ -19,8 +19,8 @@ import path_setup  # inicialização de paths (seu arquivo auxiliar)
 from utils.dataset_utils import ImageStitchingDatasetFiles
 from utils.file_utils import descompactar_zip_com_progresso
 from train_loop import train
-from generator.gen_base import BasicGenerator as default_generator
-from discriminator.disc_base import BasicDiscriminator as default_discriminator
+from generator.gen_unet_emp import UNetStackGenerator as default_generator  # <<< UNet com entrada empilhada
+from discriminator.disc_patchgan import PatchDiscriminator as default_discriminator
 
 def main():
     # === Configurações do experimento ===

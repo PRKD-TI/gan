@@ -19,19 +19,19 @@ import path_setup  # inicialização de paths (seu arquivo auxiliar)
 from utils.dataset_utils import ImageStitchingDatasetFiles
 from utils.file_utils import descompactar_zip_com_progresso
 from train_loop import train
-from generator.gen_base import BasicGenerator as default_generator
-from discriminator.disc_base import BasicDiscriminator as default_discriminator
+from generator.gen_dual_unet_deep6_skip_att_bottleneck_att_encdec import DualEncoderUNetSkip6_Attention as default_generator
+from discriminator.disc_patchgan import PatchDiscriminator as default_discriminator
 
 def main():
     # === Configurações do experimento ===
     teste_name = Path(__file__).resolve().parent.name
 
     # Descompactar dataset se necessário
-    dataset_name = "96x64_small_4000"                   # Vai definir nome das pastas também
+    dataset_name = "256x128_small_4000"                   # Vai definir nome das pastas também
     dataset_filename = dataset_name + ".zip"
     dataset_dir = ROOT_DIR / "dataset" / dataset_name / "dataset"
     train_dir = dataset_dir / "train"
-    epochs = 30
+    epochs = 10
 
     # Pastas de saída
     teste_dir = ROOT_DIR / "testes" / teste_name
@@ -52,7 +52,7 @@ def main():
     dataset = ImageStitchingDatasetFiles(str(train_dir), use_gradiente=False)
     dataloader = DataLoader(
         dataset,
-        batch_size=128,
+        batch_size=16,
         shuffle=True,
         num_workers=4,
         prefetch_factor=2,
