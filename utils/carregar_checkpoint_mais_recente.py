@@ -15,11 +15,23 @@ def carregar_checkpoint_mais_recente(checkpoints_epoch_dir, checkpoints_batch_di
         return None
     all_checkpoints = []
     for fname in os.listdir(checkpoints_epoch_dir):
+
+        # se fname inicia com __ apaga o arquivo e continua para evitar carregar arquivos corrompidos
+        if fname.startswith("__"):
+            os.remove(os.path.join(checkpoints_epoch_dir, fname))
+            continue
+
         result = extract_epoch_batch(fname)
         if result:
             epoch, batch, name = result
             all_checkpoints.append((epoch, batch, os.path.join(checkpoints_epoch_dir, name)))
     for fname in os.listdir(checkpoints_batch_dir):
+
+        # se fname inicia com __ apaga o arquivo e continua para evitar carregar arquivos corrompidos
+        if fname.startswith("__"):
+            os.remove(os.path.join(checkpoints_epoch_dir, fname))
+            continue
+
         result = extract_epoch_batch(fname)
         if result:
             epoch, batch, name = result

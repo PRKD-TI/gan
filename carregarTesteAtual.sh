@@ -1,0 +1,1 @@
+python3 testes/gan_deep_dual_unet_6_skip_cross_att_bootleneck_att_encdec_att_skip_dyn_lr/train.py
