@@ -19,7 +19,7 @@ import path_setup  # inicialização de paths (seu arquivo auxiliar)
 from utils.dataset_utils import ImageStitchingDatasetFiles
 from utils.file_utils import descompactar_zip_com_progresso
 from train_loop import train
-from generator.gen_dual_unet_deep6_skip_att_bottleneck_att_encdec_att_skip import DualEncoderUNetSkip6_Attn as default_generator
+from generator_preliminares.gen_dual_unet_deep6_skip_cross_att_bottleneck_att_encdec import DualEncoderUNetSkip6_Attention as default_generator
 from discriminator.disc_patchgan import PatchDiscriminator as default_discriminator
 
 def main():

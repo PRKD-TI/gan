@@ -1,0 +1,80 @@
+gan/
+│
+├── train.py                       # script principal de treino
+├── train_loop.py                  # loop de treino com losses, métricas e checkpoints
+│
+├── models/
+│   ├── generator/
+│   │   ├── dual_encoder_unet_cross_skip6_attn.py   # gerador principal
+│   │   ├── __init__.py
+│   │
+│   ├── discriminator/
+│   │   ├── patch_discriminator.py  # discriminador PatchGAN
+│   │   ├── __init__.py
+│   │
+│   ├── blocks/
+│   │   ├── conv_block.py           # ConvBlock (com opção SEBlock)     OK conv_up_blocks.py
+│   │   ├── up_block.py             # UpBlock (com opção SEBlock)       OK conv_up_blocks.py
+│   │   ├── resnet_block.py         # ResNetBlock                       OK
+│   │   ├── aspp.py                 # Atrous Spatial Pyramid Pooling    OK
+│   │   ├── deep_supervision.py     # funções para deep supervision     OK
+│   │   ├── __init__.py
+│   │
+│   ├── attention/
+│   │   ├── cbam.py                 # Convolutional Block Attention Module
+│   │   ├── se_block.py             # Squeeze-and-Excitation
+│   │   ├── __init__.py
+│   │
+│   └── __init__.py
+│
+├── utils/
+│   ├── metrics.py
+│   ├── carregar_checkpoint_mais_recente.py
+│   ├── carregar_amostras_fixas.py
+│   ├── ...
+│
+└── logs/                          # tensorboard
+
+
+
+
+Input: Parte1 (3x256x128)    Input: Parte2 (3x256x128)
+        │                           │
+   ┌────┘                           └────┐
+   ▼                                    ▼
+Encoder1 (Conv+BN+ReLU+SE+ResNet)   Encoder2 (Conv+BN+ReLU+SE+ResNet)
+   │   │   │   │   │   │             │   │   │   │   │   │
+   │   │   │   │   │   └────────┐    │   │   │   │   │   └────────┐
+   ▼   ▼   ▼   ▼   ▼             │    ▼   ▼   ▼   ▼   ▼             │
+  E1  E2  E3  E4  E5  E6         │   E1' E2' E3' E4' E5' E6'        │
+   └─────────────────────────────┴───────┘
+                      │
+                      ▼
+             ┌───────────────────┐
+             │   Bottleneck      │
+             │ [ASPP + CBAM +    │
+             │  ResNet blocks]   │
+             └───────────────────┘
+                      │
+                      ▼
+                Decoder Path
+          (UpBlock + ResNet + SE)
+                      │
+          ┌───────────┼───────────┐
+          ▼           ▼           ▼
+       Skip (CBAM)  Skip (CBAM)  Skip (CBAM)
+   (alternando cross: ora vem de Encoder1,
+    ora de Encoder2, com atenção CBAM)
+                      │
+                      ▼
+           ┌────────────────────┐
+           │ Deep Supervision   │
+           │ (saídas auxiliares │
+           │ em estágios D1..D4)│
+           └────────────────────┘
+                      │
+                      ▼
+             Final ConvTranspose
+                   │
+                   ▼
+             Output (3x256x128)

@@ -36,7 +36,8 @@ def train(
     save_every, checkpoint_dir, checkpoint_batch_dir,
     tensorboard_dir, lr_g=2e-4, lr_d=2e-4,
     lr_min=1e-6, gen_steps_mode='adaptive', max_gen_steps=5,
-    vgg_weight=0.5, deep_supervision_weight=1.0,  # <-- NOVO: Peso para a perda de supervisão profunda
+    vgg_weight=0.5, 
+    deep_supervision_weight=1.0,  # <-- NOVO: Peso para a perda de supervisão profunda
     fixeSampleTime=5,  # minutos
     fixed_samples_source='../fixed_samples.pt',
     fixed_samples_dest='./fixed_samples'

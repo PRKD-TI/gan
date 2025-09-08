@@ -31,9 +31,9 @@ def salvar_resultados_fixos(generator, fixed_samples, output_dir, step_tag):
     os.makedirs(output_dir, exist_ok=True)
     with torch.no_grad():
         for idx, ((p1, p2), gt) in enumerate(fixed_samples):
-            fake = gen_for_eval(p1, p2)
+            # A linha abaixo foi ajustada para desempacotar a tupla
+            fake, _ = gen_for_eval(p1, p2)
             linha = torch.cat([p1, p2, fake, gt], dim=3)
             vutils.save_image(linha, os.path.join(output_dir, f"sample_{idx+1}_{step_tag}.png"), normalize=True)
     if not isinstance(generator, tuple):
         gen_for_eval.train()
-
