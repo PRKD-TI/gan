@@ -1,1 +1,1 @@
-python3 testes/gan_deep_dual_unet_6_skip_cross_att_bootleneck_att_encdec_att_skip_dyn_lr/train.py
+python3 testes/DualEncoderUNetSkip4_CBAM_Skips_DeepSupervision/train.py

@@ -27,7 +27,7 @@ def main():
     teste_name = Path(__file__).resolve().parent.name
 
     # Descompactar dataset se necessário
-    dataset_name = "256x128_small_4000"                   # Vai definir nome das pastas também
+    dataset_name = "512x256"                   # Vai definir nome das pastas também
     dataset_filename = dataset_name + ".zip"
     dataset_dir = ROOT_DIR / "dataset" / dataset_name / "dataset"
     train_dir = dataset_dir / "train"
@@ -46,16 +46,16 @@ def main():
     # os.makedirs(checkpoint_batch_dir, exist_ok=True)
 
     # Descompactar dataset, se necessário
-    # descompactar_zip_com_progresso(dataset_dir / dataset_filename, train_dir)
+    descompactar_zip_com_progresso(dataset_dir / dataset_filename, train_dir)
 
     # === Dataset e DataLoader ===
     dataset = ImageStitchingDatasetFiles(str(train_dir), use_gradiente=False)
     dataloader = DataLoader(
         dataset,
-        batch_size=2,
+        batch_size=32,
         shuffle=True,
-        num_workers=8,
-        prefetch_factor=4,
+        num_workers=32,
+        prefetch_factor=8,
         pin_memory=True,
     )
 
@@ -77,9 +77,9 @@ def main():
         checkpoint_dir=str(checkpoint_epoch_dir),
         checkpoint_batch_dir=str(checkpoint_batch_dir),
         tensorboard_dir=str(ROOT_DIR / "logs" / "prkd" / (teste_name + f"_{dataset_name}")),
-        lr_g=2e-5,
-        lr_d=2e-5,
-        lr_min=1e-7,
+        lr_g=2e-4,
+        lr_d=2e-4,
+        lr_min=1e-5,
         gen_steps_mode="adaptative",   # 'fixed' ou 'adaptive'
         max_gen_steps=15,          # menor p/ testes rápidos
         vgg_weight=0.5,

@@ -140,11 +140,13 @@ def train(
                 mean_loss_D = sum(loss_D_hist) / len(loss_D_hist)
                 mean_loss_G = sum(loss_G_hist) / len(loss_G_hist)
                 normalized_mean_loss_G = mean_loss_G
-                if ((normalized_mean_loss_G + 1e-8) - (mean_loss_D + 1e-8)) == 0:
+                if ((normalized_mean_loss_G + 1e-8) - (mean_loss_D + 1e-8)) == 0 or normalized_mean_loss_G == 0 or mean_loss_D == 0:
                     ratio = 1.0
                 else:
-                    ratio = ((normalized_mean_loss_G + 1e-8) - (mean_loss_D + 1e-8)) / (normalized_mean_loss_G + 1e-8)
-                gen_steps = int(round(max(1, min(max_gen_steps, (max_gen_steps / 2) + (max_gen_steps / 2 * ratio)))))
+                    # ratio = ((normalized_mean_loss_G + 1e-8) - (mean_loss_D + 1e-8)) / (normalized_mean_loss_G + 1e-8)
+                    ratio = normalized_mean_loss_G / mean_loss_D
+                # gen_steps = int(round(max(1, min(max_gen_steps, (max_gen_steps / 2) + (max_gen_steps / 2 * ratio)))))
+                gen_steps = int(round(ratio * (max_gen_steps / 2)))
                 if ratio > 2.0:
                     gen_steps = max_gen_steps
                 elif ratio < -1.0:
