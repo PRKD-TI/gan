@@ -1,1 +1,1 @@
-python3 testes/DualEncoderUNetSkip4_CBAM_Skips_DeepSupervision/train.py
+python3 testes/DualEncoderUNetSkip4_CBAM_Skips_DeepSupervision_mini_100/train.py
