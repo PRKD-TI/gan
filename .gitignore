@@ -18,6 +18,11 @@ __pycache__/
 /runs
 colab_key*
 
+# Mas re-inclui a pasta específica dentro de dataset
+!/dataset/256x128_100/
+
+# E re-inclui todo o conteúdo dessa pasta específica
+!/dataset/256x128_100/**
 
 # Distribution / packaging
 .Python
