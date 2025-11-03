@@ -20,7 +20,7 @@ from utils.dataset_utils import ImageStitchingDatasetFiles
 from utils.file_utils import descompactar_zip_com_progresso
 from train_loop import train
 # Importe o gerador atualizado (DualEncoderUNet_Res_ASPP_CBAM_DeepSupervision)
-from generator.DualEncoderUNet_Baseline import DualEncoderUNet_Baseline as default_generator
+from generator.generator_blocks import DualEncoderUNet_Res_ASPP_CBAM_DeepSupervision as default_generator
 from discriminator.disc_patchgan import PatchDiscriminator as default_discriminator
 
 def main():
@@ -69,7 +69,10 @@ def main():
     generator = default_generator(
         input_nc=3, 
         output_nc=3, 
-        ngf=64 
+        ngf=32, 
+        use_cbam=True, 
+        use_res=True, 
+        use_non_local=False # <--- Desativado por padrão para iniciar. Ative se a P2000 aguentar e precisar.
     ).to(device) 
     discriminator = default_discriminator(input_nc=9).to(device)
 
@@ -89,8 +92,8 @@ def main():
         lr_min=1e-6, # Mantido, mas pode ir para 1e-7 se LRs caírem muito
         gen_steps_mode="fixed",   # <--- ALTERADO para 'fixed' para testes iniciais
         max_gen_steps=1,          # <--- ALTERADO para 1 para começar. Pode ir para 2 ou 3 se estabilizar.
-        vgg_weight=0,             # <--- Sugestão: Aumente para 1.0 ou 2.0 se imagens estiverem borradas
-        deep_supervision_weight=0, # <--- Sugestão: Aumente para 0.5 ou 1.0 se as saídas intermediárias forem ruins
+        vgg_weight=0.5,           # <--- Sugestão: Aumente para 1.0 ou 2.0 se imagens estiverem borradas
+        deep_supervision_weight=0.3, # <--- Sugestão: Aumente para 0.5 ou 1.0 se as saídas intermediárias forem ruins
         fixeSampleTime=1,         # minutos - Para ver a evolução mais de perto
         fixed_samples_source=str(dataset_dir / "fixed_samples.pt"), # Caminho para amostras fixas do mini-dataset
         fixed_samples_dest=str(fixed_samples_dest), # Caminho para salvar amostras fixas
